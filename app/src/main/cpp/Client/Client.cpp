@@ -136,7 +136,7 @@ Java_uk_lgl_modmenu_FloatingModMenuService_getFeatureList(JNIEnv *env, jobject c
 
 
     const char *features[] = {
-            ("Category_A I M B O T"),
+            ("Category_Category"),
             ("Toggle_TOGGLE TEST"),//0
 
     };
