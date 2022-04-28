@@ -13,6 +13,7 @@ void stopClient();
 bool initServer();
 bool stopServer();
 
+float myfloat = 0;
 enum Mode {
     InitMode = 1,
     HackMode = 2,
@@ -31,6 +32,7 @@ enum m_Features {
 struct Request {
     int Mode;///feature
     bool m_IsOn;///on off
+    float test;//your float valuse here
 };
 
 struct Response {
@@ -98,6 +100,23 @@ void SendFeatuere(int32_t number, bool ftr) {
         }
     }
 }
+
+Response getData(){
+
+    Request request{Mode::ESPMode, true,myfloat};
+    int code = client.send((void*) &request, sizeof(request));
+    if(code > 0){
+        Response response{};
+        size_t length = client.receive((void*) &response);
+        if(length > 0){
+            return response;
+        }
+    }
+    Response response{false, 0};
+    return response;
+}
+
+
 extern "C" {
 
 void setText(JNIEnv *env, jobject obj, const char *text) {
@@ -138,6 +157,7 @@ Java_uk_lgl_modmenu_FloatingModMenuService_getFeatureList(JNIEnv *env, jobject c
     const char *features[] = {
             ("Category_Category"),
             ("Toggle_TOGGLE TEST"),//0
+            ("SeekBar_SeekBar TEST_0_10"),//1
 
     };
 
@@ -164,6 +184,10 @@ Java_uk_lgl_modmenu_Preferences_Changes(JNIEnv *env, jclass clazz, jobject obj,
             myfeature = boolean;
             SendFeatuere(m_Features::yourfunction, myfeature);///sends the on/off to socket
             break;
+
+        case 1:
+            myfloat = value;
+        break;
     }
 }
 }
@@ -171,6 +195,10 @@ Java_uk_lgl_modmenu_Preferences_Changes(JNIEnv *env, jclass clazz, jobject obj,
 ESP espOverlay;
 void DrawESP(ESP esp, int screenWidth, int screenHeight) {
     esp.DrawText(Color::White(), 0.6f, ("[ YOUR TEXT HERE ]"),Vector3(screenWidth / 2, screenHeight / 1.03 + 10.0f), 30.0f);
+    Response response = getData();
+    if(response.Success){
+        ///esp stuffs here
+    }
 }
 
 extern "C" JNIEXPORT void JNICALL

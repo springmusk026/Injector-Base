@@ -71,6 +71,7 @@ enum m_Features {
 struct Request {
     int Mode;///feature
     bool m_IsOn;///on off
+    float test;//your float valuse here
 };
 
 struct Response {
@@ -79,7 +80,7 @@ struct Response {
 
 
 bool myfeature = false;
-
+float myfloat = 0;
 int InitServer() {
     if (!server.Create()) {
         return -1;
@@ -92,6 +93,9 @@ int InitServer() {
        return -1;
     }
     return 0;
+}
+
+void  createDataList(Response& response) {
 }
 
 void *CreateServer(void *) {
@@ -111,7 +115,12 @@ void *CreateServer(void *) {
 					
                 } else if (request.Mode == Mode::HackMode) {
 					response.Success = true;
-                }else if (request.Mode == m_Features::yourfunction) {
+                }else if (request.Mode == Mode::ESPMode) {
+                    myfloat = request.test;
+                    createDataList(response);
+                    response.Success = true;
+
+                } else if (request.Mode == m_Features::yourfunction) {
                     myfeature = request.m_IsOn;//onoff boolean
                     /*Usage: if(myfeature){
                      /////your stuffs here
