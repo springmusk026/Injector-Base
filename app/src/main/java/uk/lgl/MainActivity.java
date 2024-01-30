@@ -15,8 +15,6 @@ import uk.lgl.modmenu.FloatingModMenuService;
 public class MainActivity extends Activity {
 
     static {
-        // When you change the lib name, change also on Android.mk file
-        // Both must have same name
         System.loadLibrary("Client");
     }
 
@@ -29,7 +27,6 @@ public class MainActivity extends Activity {
     }
 
     public static void Start(final Context context) {
-        //Check if overlay permission is enabled or not
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(context)) {
             Toast.makeText(context.getApplicationContext(), "Overlay permission is required in order to show mod menu. Restart the game after you allow permission", Toast.LENGTH_LONG).show();
             context.startActivity(new Intent("android.settings.action.MANAGE_OVERLAY_PERMISSION",

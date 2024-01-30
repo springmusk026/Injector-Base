@@ -1,7 +1,4 @@
 #include <pthread.h>
-#include <jni.h>
-#include <stdio.h>
-#include <wchar.h>
 #include "Substrate/SubstrateHook.h"
 #include "../Socket/SocketServer.h"
 #include "Unity/Quaternion.hpp"
@@ -17,20 +14,20 @@ static uintptr_t libBase;
 DWORD findLibrary(const char *library) {
     char filename[0xFF] = {0},
             buffer[1024] = {0};
-    FILE *fp = NULL;
+    FILE *fp = nullptr;
     DWORD address = 0;
 
     sprintf(filename, "/proc/self/maps");
 
     fp = fopen(filename,"rt");
-    if (fp == NULL) {
+    if (fp == nullptr) {
         perror("fopen");
         goto done;
     }
 
     while (fgets(buffer, sizeof(buffer), fp)) {
         if (strstr(buffer, library)) {
-            address = (DWORD) strtoul(buffer, NULL, 16);
+            address = (DWORD) strtoul(buffer, nullptr, 16);
             goto done;
         }
     }
@@ -144,19 +141,19 @@ void *hack_thread(void *) {
     while (true) {
         if (getAbsoluteAddress("libname.so",0) != 0) {/////use it to prevent some random freezing on startup
 
-        pthread_exit(NULL);
+        pthread_exit(nullptr);
        }
     }
-  return NULL;
+  return nullptr;
 }
 
 
 extern "C"
 void __attribute__ ((constructor)) OnLoad() {
-	pthread_t ptid;
+    pthread_t ptid;
 	pthread_create(&ptid, nullptr, CreateServer, nullptr);
 	
 	pthread_t ptid2;
-    pthread_create(&ptid2, NULL, hack_thread, NULL);
+    pthread_create(&ptid2, nullptr, hack_thread, nullptr);
 
 }

@@ -112,7 +112,7 @@ Response getData(){
             return response;
         }
     }
-    Response response{false, 0};
+    Response response{false};
     return response;
 }
 
